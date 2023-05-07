@@ -43,4 +43,15 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+        static::saving(function ($user) {
+            $user->name = request('name');
+            $user->username = request('username');
+            $user->email = request('email');
+            $user->password = bcrypt(request('password'));
+        });
+    }
 }

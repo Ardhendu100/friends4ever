@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateUserRequest;
+use App\Events\UserCreated;
 use App\Mail\WelcomeMail;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -25,6 +25,7 @@ class UserController extends Controller
             $user = new User();
             $user->save();
             // Mail::to($request['email'])->send(new WelcomeMail($user));
+            event(new UserCreated($user));
             return response()->json([
                 'response' => $user,
                 'message' => 'User created successfully',

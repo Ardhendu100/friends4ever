@@ -24,7 +24,7 @@ class UserController extends Controller
             $request->validate($rules);
             $user = new User();
             $user->save();
-            Mail::to($request['email'])->send(new WelcomeMail($user));
+            // Mail::to($request['email'])->send(new WelcomeMail($user));
             return response()->json([
                 'response' => $user,
                 'message' => 'User created successfully',

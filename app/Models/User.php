@@ -50,6 +50,16 @@ class User extends Authenticatable
         return $this->morphMany(Image::class, 'imageable');
     }
 
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'user_id', 'follower_id')->withTimestamps();
+    }
+
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'user_id')->withTimestamps();
+    }
+
     public static function boot()
     {
         parent::boot();

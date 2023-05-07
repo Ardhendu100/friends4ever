@@ -15,7 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 Route::post('/register',[UserController::class,'registerUser']);
+Route::post('/login',[UserController::class,'loginUser']);
+
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::post('/follow-user/{follower}',[UserController::class,'followUser']);
+});

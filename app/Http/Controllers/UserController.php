@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateUserRequest;
+use App\Mail\WelcomeMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-
+use Illuminate\Support\Facades\Mail;
 class UserController extends Controller
 {
     //
@@ -23,6 +24,7 @@ class UserController extends Controller
             $request->validate($rules);
             $user = new User();
             $user->save();
+            Mail::to($request['email'])->send(new WelcomeMail($user));
             return response()->json([
                 'response' => $user,
                 'message' => 'User created successfully',

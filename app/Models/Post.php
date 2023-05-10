@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 class Post extends Model
 {
     use HasFactory;
-    protected $fillable = ['title','description','user_id','category_id'];
+    protected $fillable = ['title','description','user_id'];
 
     public function user(){
         return $this->belongsTo((User::class));

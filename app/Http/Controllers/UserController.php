@@ -80,4 +80,12 @@ class UserController extends Controller
             'code' => Response::HTTP_OK
         ],Response::HTTP_OK);
     }
+
+    public function allUsers()
+    {
+        return response()->json([
+            'response' =>User::all(),
+            'code' => Response::HTTP_OK
+        ], Response::HTTP_OK);
+    }
 }

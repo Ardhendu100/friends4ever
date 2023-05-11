@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,7 +14,7 @@ use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable,SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -58,6 +60,11 @@ class User extends Authenticatable
     public function following()
     {
         return $this->belongsToMany(User::class, 'followers', 'follower_id', 'user_id')->withTimestamps();
+    }
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = ucfirst($value);
     }
 
     public static function boot()

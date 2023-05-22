@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class Post extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'description', 'user_id'];
+    protected $fillable = ['title', 'description', 'user_id', 'video_url'];
 
     public function user()
     {
@@ -31,12 +31,17 @@ class Post extends Model
         static::saving(function ($post) {
             $post->title = request('title');
             $post->description = request('description');
+            if (request('video_url')) {
+                $post->video_url = request('video_url')->store('public/videos');
+            }
             $post->user_id = Auth::user()->id;
         });
         static::saved(function ($post) {
             $image = new Image();
+            if (request('video_url')) {
             $image->image = request('image')->store('allImages');
             $post->images()->save($image);
+            }
         });
     }
 }

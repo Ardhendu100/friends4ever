@@ -1,6 +1,7 @@
 <?php
 
 use App\Facades\Invoice;
+use App\Http\Controllers\UserController;
 use App\Mail\WelcomeMail;
 use Illuminate\Support\Facades\Route;
 
@@ -15,11 +16,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    // return view('welcome');
-    Invoice::greet();
+Route::get('/', [UserController::class, 'allUsers']);
+Route::get('/users/{user}', [UserController::class, 'showUser'])->name('user.show');
 
-});
 
 //route for mailing
 Route::get('/email',function(){

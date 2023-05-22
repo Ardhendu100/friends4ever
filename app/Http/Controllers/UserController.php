@@ -83,9 +83,17 @@ class UserController extends Controller
 
     public function allUsers()
     {
-        return response()->json([
-            'response' =>User::all(),
-            'code' => Response::HTTP_OK
-        ], Response::HTTP_OK);
+        $users = User::all();
+        return view('users.index', ['users' => $users]);
+
+        // return response()->json([
+        //     'response' =>User::all(),
+        //     'code' => Response::HTTP_OK
+        // ], Response::HTTP_OK);
+    }
+
+    public function showUser(User $user)
+    {
+        return view('users.show', ['user' => $user]);    
     }
 }

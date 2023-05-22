@@ -36,7 +36,8 @@ class PostController extends Controller
         $rules = [
             'title' => 'required|max:100',
             'description' => 'required|max:255',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',     
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'video_url' => 'mimetypes:video/mp4,video/mpeg,video/quicktime|max:50000',
         ];
         try {
             $request->validate($rules);

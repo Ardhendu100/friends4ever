@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('description');
             $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('video_url')->nullable(); // Column to store the video file path
             $table->timestamps();
         });
     }

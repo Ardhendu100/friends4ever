@@ -22,8 +22,8 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [UserController::class, 'registerUser']);
 Route::post('/login', [UserController::class, 'loginUser']);
 
-// Route::group(['middleware' => ['auth:api','cors']], function () {
+Route::group(['middleware' => ['auth:api']], function () {
     Route::post('/follow-user/{follower}', [UserController::class, 'followUser']);
     Route::resource('/posts', PostController::class);
     Route::get('/users', [UserController::class, 'allUsers']);
-// });
+});

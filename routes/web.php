@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [UserController::class, 'allUsers']);
 Route::get('/users/{user}', [UserController::class, 'showUser'])->name('user.show');
 
+Route::post('/login', [UserController::class, 'login']);
+Route::get('/login', [UserController::class, 'showLoginForm'])->name('login');
 
 //route for mailing
 Route::get('/email',function(){

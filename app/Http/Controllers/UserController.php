@@ -96,4 +96,29 @@ class UserController extends Controller
     {
         return view('users.show', ['user' => $user]);    
     }
+
+    public function showLoginForm()
+{
+    return view('auth.login');
+}
+
+public function login(Request $request)
+{
+    $credentials = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
+
+    if (Auth::attempt($credentials)) {
+        // Authentication successful
+        return view('auth.login');
+    } else {
+        // Authentication failed
+        return back()->withErrors([
+            'email' => 'Invalid credentials',
+        ])->withInput();
+    }
+}
+
+
 }

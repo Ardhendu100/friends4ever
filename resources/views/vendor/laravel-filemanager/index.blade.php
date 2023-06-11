@@ -101,6 +101,9 @@
           <div class="item_name text-truncate"></div>
           <time class="text-muted font-weight-light text-truncate"></time>
         </div>
+        <button class="copy_button btn btn-sm ml-auto mr-5" data-clipboard-text="" style="background-color:transparent; border:none">
+        <i class="fas fa-copy"></i> 
+  </button>
       </a>
     </div>
 
@@ -260,9 +263,9 @@
       }
     ];
   </script>
-  <script>{!! \File::get(base_path('vendor/unisharp/laravel-filemanager/public/js/script.js')) !!}</script>
-  {{-- Use the line below instead of the above if you need to cache the script. --}}
-  {{-- <script src="{{ asset('vendor/laravel-filemanager/js/script.js') }}"></script> --}}
+  <!-- <script>{!! \File::get(base_path('vendor/unisharp/laravel-filemanager/public/js/script.js')) !!}</script> -->
+  <!-- {{-- Use the line below instead of the above if you need to cache the script. --}} -->
+  <script src="{{ asset('vendor/laravel-filemanager/js/script.js') }}"></script>
   <script>
     Dropzone.options.uploadForm = {
       paramName: "upload[]", // The name that will be used to transfer the file

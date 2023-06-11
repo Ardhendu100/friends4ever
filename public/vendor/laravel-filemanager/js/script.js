@@ -455,11 +455,18 @@ function loadItems(page) {
             var icon = $('<div>').addClass('ico');
             var image = $('<div>').addClass('mime-icon ico-' + item.icon).append(icon);
           }
-
           template.find('.square').append(image);
           template.find('.item_name').text(item.name);
-          template.find('time').text((new Date(item.time * 1000)).toLocaleString());
-
+          template.find('.item_name').text(item.name);
+          template.find('.copy_button').click(function (e) {
+            // Get the item URL
+            var itemUrl = item.url;
+            // Copy the item URL to the clipboard
+            copyToClipboard(itemUrl);
+            alert('Image URL copied successfully');
+            // Display the copied URL in the console
+            console.log(itemUrl);
+          });
           $('#content').append(template);
         });
       }
@@ -515,6 +522,18 @@ function loadItems(page) {
       loading(false);
       toggleActions();
     });
+}
+
+// Function to copy text to the clipboard
+function copyToClipboard(text) {
+  var dummyInput = document.createElement('input');
+  dummyInput.style.position = 'fixed';
+  dummyInput.style.opacity = 0;
+  dummyInput.value = text;
+  document.body.appendChild(dummyInput);
+  dummyInput.select();
+  document.execCommand('copy');
+  document.body.removeChild(dummyInput);
 }
 
 function loading(show_loading) {

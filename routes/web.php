@@ -1,6 +1,8 @@
 <?php
 
 use App\Facades\Invoice;
+use App\Http\Controllers\FileManagerController;
+use App\Http\Controllers\PageBuilderController;
 use App\Http\Controllers\UserController;
 use App\Mail\WelcomeMail;
 use Illuminate\Support\Facades\Route;
@@ -22,7 +24,14 @@ Route::get('/users/{user}', [UserController::class, 'showUser'])->name('user.sho
 Route::post('/login', [UserController::class, 'login']);
 Route::get('/login', [UserController::class, 'showLoginForm'])->name('login');
 
+Route::get('/page-builder', [PageBuilderController::class,'index']);
+Route::post('/page-builder/save',[PageBuilderController::class,'save']);
+
+
 //route for mailing
 Route::get('/email',function(){
+    
     return new WelcomeMail();
 });
+Route::get('filemanager', [FileManagerController::class, 'index']);
+

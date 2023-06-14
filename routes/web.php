@@ -2,6 +2,7 @@
 
 use App\Facades\Invoice;
 use App\Http\Controllers\FileManagerController;
+use App\Http\Controllers\FileManagerItemsController;
 use App\Http\Controllers\PageBuilderController;
 use App\Http\Controllers\UserController;
 use App\Mail\WelcomeMail;
@@ -36,5 +37,8 @@ Route::get('/email',function(){
 Route::get('filemanager', [FileManagerController::class, 'index']);
 
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
-    \UniSharp\LaravelFilemanager\Lfm::routes();
+	\UniSharp\LaravelFilemanager\Lfm::routes();
+	Route::get('/jsonitems', [FileManagerItemsController::class, 'getItems']);
+    Route::get('/download', [FileManagerItemsController::class, 'download']);
+
 });

@@ -36,12 +36,12 @@ $(document).ready(function () {
     buttons: [
       {
         icon: 'fas fa-upload',
-        label: lang['nav-upload'],
+        label: 'Upload',
         attrs: {id: 'upload'}
       },
       {
         icon: 'fas fa-folder',
-        label: lang['nav-new'],
+        label: 'New Folder',
         attrs: {id: 'add-folder'}
       }
     ]
@@ -132,7 +132,7 @@ $('#main').click(function (e) {
 });
 
 $(document).on('click', '#add-folder', function () {
-  dialog(lang['message-name'], '', createFolder);
+  dialog('message-name', '', createFolder);
 });
 
 $(document).on('click', '#upload', function () {
@@ -426,13 +426,25 @@ function loadItems(page) {
       var response = JSON.parse(data);
       var working_dir = response.working_dir;
       items = response.items;
+      if (response.working_dir === '/1') {
+        const linkElement = document.querySelector('#rootFolder');
+        if (linkElement) {
+          linkElement.click();
+        }
+      }
+      // if(response.working_dir == '/1'){
+      //   $('#rootFolder').click()
+      // }
       var hasItems = items.length !== 0;
       var hasPaginator = !!response.paginator;
       $('#empty').toggleClass('d-none', hasItems);
       $('#content').html('').removeAttr('class');
       $('#pagination').html('').removeAttr('class');
-
+      
       if (hasItems) {
+        if(items.length < 30){
+          $('#pagination').hide();
+        }
         $('#content').addClass(response.display);
         $('#pagination').addClass('preserve_actions_space');
 
@@ -457,15 +469,27 @@ function loadItems(page) {
           }
           template.find('.square').append(image);
           template.find('.item_name').text(item.name);
-          template.find('.item_name').text(item.name);
+          if(item.is_file == true && item.is_image == true){
+            template.find('.square').click(function(e){
+              imagePreview(item)
+            })
+            template.find('.item_name').click(function(e){
+              imagePreview(item)
+            })
+          }
+         
+          if(item.is_file == false && item.is_image == false){
+            template.find('.copy_button').hide();
+            template.find('time').hide();
+          }
+          template.find('time').text(item.last_modified);
           template.find('.copy_button').click(function (e) {
             // Get the item URL
             var itemUrl = item.url;
             // Copy the item URL to the clipboard
             copyToClipboard(itemUrl);
-            alert('Image URL copied successfully');
+            alert('URL copied successfully');
             // Display the copied URL in the console
-            console.log(itemUrl);
           });
           $('#content').append(template);
         });
@@ -486,8 +510,8 @@ function loadItems(page) {
       $('#nav-buttons > ul').removeClass('d-none');
 
       $('#working_dir').val(working_dir);
-      console.log('Current working_dir : ' + working_dir);
       var breadcrumbs = [];
+      // working_dir = 'shares'
       var validSegments = working_dir.split('/').filter(function (e) { return e; });
       validSegments.forEach(function (segment, index) {
         if (index === 0) {
@@ -550,7 +574,7 @@ function createFolder(folder_name) {
 // ==================================
 
 function rename(item) {
-  dialog(lang['message-rename'], item.name, function (new_name) {
+  dialog('message-rename', item.name, function (new_name) {
     performLfmRequest('rename', {
       file: item.name,
       new_name: new_name
@@ -559,7 +583,7 @@ function rename(item) {
 }
 
 function trash(items) {
-  notify(lang['message-delete'], function () {
+  notify('message-delete', function () {
     performLfmRequest('delete', {
       items: items.map(function (item) { return item.name; })
     }).done(refreshFoldersAndItems)
@@ -596,6 +620,42 @@ function download(items) {
 function open(item) {
   goTo(item.url);
 }
+
+
+function imagePreview(selectedItem) {
+  var carousel = $('#carouselTemplate').clone().attr('id', 'previewCarousel').removeClass('d-none');
+  var imageTemplate = carousel.find('.carousel-item').clone().removeClass('active');
+  var indicatorTemplate = carousel.find('.carousel-indicators > li').clone().removeClass('active');
+  carousel.children('.carousel-inner').html('');
+  carousel.children('.carousel-indicators').html('');
+  
+  // Hide carousel controls if there's only one item
+  carousel.children('.carousel-indicators, .carousel-control-prev, .carousel-control-next').toggle(false);
+
+  var carouselItem = imageTemplate.clone().addClass('active');
+
+  if (selectedItem.thumb_url) {
+    carouselItem.find('.carousel-image').css('background-image', 'url(\'' + selectedItem.url + '?timestamp=' + selectedItem.time + '\')');
+  } else {
+    carouselItem.find('.carousel-image').css('width', '50vh').append($('<div>').addClass('mime-icon ico-' + selectedItem.icon));
+  }
+
+  carouselItem.find('.carousel-label').attr('target', '_blank').attr('href', selectedItem.url)
+    .append(selectedItem.name)
+    .append($('<i class="fas fa-external-link-alt ml-2"></i>'));
+
+  carousel.children('.carousel-inner').append(carouselItem);
+
+  var carouselIndicator = indicatorTemplate.clone().addClass('active').attr('data-slide-to', 0);
+  carousel.children('.carousel-indicators').append(carouselIndicator);
+
+  // carousel swipe control
+  var touchStartX = null;
+
+  // end carousel swipe control
+  notify(carousel);
+}
+
 
 function preview(items) {
   var carousel = $('#carouselTemplate').clone().attr('id', 'previewCarousel').removeClass('d-none');
@@ -808,7 +868,6 @@ function defaultParameters() {
     type: $('#type').val()
   };
 }
-
 function notImp() {
   notify('Not yet implemented!');
 }
@@ -827,5 +886,5 @@ function dialog(title, value, callback) {
   $('#dialog').find('.btn-primary').unbind().click(function (e) {
     callback($('#dialog').find('input').val());
   });
-  $('#dialog').modal('show').find('.modal-title').text(title);
+  $('#dialog').modal('show').find('.modal-title').text('Folder name:');
 }

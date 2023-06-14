@@ -27,6 +27,7 @@ return [
      */
 
     'allow_private_folder'     => true,
+    'allow_multi_user'         => true,
 
     // Flexible way to customize client folders accessibility
     // If you want to customize client folders, publish tag="lfm_handler"
@@ -38,6 +39,9 @@ return [
     'allow_shared_folder'      => true,
 
     'shared_folder_name'       => 'shares',
+
+    'files_dir'          => 'public/files/',
+    'files_url'          => '/files/',
 
     /*
     |--------------------------------------------------------------------------
@@ -94,19 +98,29 @@ return [
     |--------------------------------------------------------------------------
      */
 
-    'disk'                     => 's3',
+
+    'disk' => 's3',
 
     'rename_file'              => false,
 
     'rename_duplicates'        => false,
 
-    'alphanumeric_filename'    => false,
+    'alphanumeric_filename'    => true,
 
-    'alphanumeric_directory'   => false,
+    'alphanumeric_directory'   => true,
 
     'should_validate_size'     => false,
 
-    'should_validate_mime'     => true,
+    'should_validate_mime'     => false,
+
+    // permissions to be set when create a new folder or when it creates automatically with thumbnails
+'create_folder_mode' => 0755,
+
+// permissions to be set on file upload.
+'create_file_mode' => 0644,
+
+// If true, it will attempt to chmod the file after upload
+'should_change_file_mode' => true,
 
     // behavior on files with identical name
     // setting it to true cause old file replace with new one
@@ -117,7 +131,7 @@ return [
     'disallowed_mimetypes' => ['text/x-php', 'text/html', 'text/plain'],
 
     // Item Columns
-    'item_columns' => ['name', 'url', 'time', 'icon', 'is_file', 'is_image', 'thumb_url'],
+    'item_columns' => ['name', 'url', 'icon', 'is_file', 'is_image', 'thumb_url'],
 
     /*
     |--------------------------------------------------------------------------
@@ -153,7 +167,6 @@ return [
         'docx' => 'Microsoft Word',
         'xls'  => 'Microsoft Excel',
         'xlsx' => 'Microsoft Excel',
-        'zip'  => 'Archive',
         'gif'  => 'GIF Image',
         'jpg'  => 'JPEG Image',
         'jpeg' => 'JPEG Image',
